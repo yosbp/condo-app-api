@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Restaurant;
-use App\Models\Seller;
+use App\Models\Administrator;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -22,7 +20,7 @@ class AuthController extends Controller
                 'name' => 'required|string',
                 'email' => 'required|email|string|unique:users,email',
                 'password' => 'required',
-                'role' => 'required|in:admin,client',
+                'role' => 'required|in:administrator,owner,superadmin',
             ]
         );
 
@@ -36,15 +34,15 @@ class AuthController extends Controller
         }
 
         // Create only 1 admin user
-        if ($request->role === 'admin') {
-            $admin = User::where('role', 'admin')->first();
+        /* if ($request->role == 'administrator') {
+            $admin = User::where('role', 'administrator')->first();
             if ($admin) {
                 return response()->json([
                     'status' => false,
                     'message' => 'There is already an admin user',
                 ], 401);
             }
-        }
+        } */
 
         // Create User
         $user = User::create([
@@ -54,12 +52,17 @@ class AuthController extends Controller
             'role'  => $request->role,
         ]);
 
+        // Crear el administrador asociado al usuario
+        if ($user->role === 'administrator') {
+            $user->administrator()->create();
+        }
+
         // Return response
         return response()->json([
             'status' => true,
             'message' => 'User Created Successfully',
             'token' => $user->createToken("TOKEN")->plainTextToken,
-            'user' => $request->only('name', 'role'),
+            'user' => $request->only('name', 'role', 'email'),
         ], 200);
     }
 
@@ -108,6 +111,7 @@ class AuthController extends Controller
             'message' => 'Loggin Successfully',
             'token' => $user->createToken("TOKEN")->plainTextToken,
             'user' => $user->only('name', 'email', 'role'),
+            'condominium' => $user->administrator->condominium ?? null,
         ], 200);
     }
 

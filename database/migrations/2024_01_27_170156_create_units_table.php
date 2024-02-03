@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('units', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->enum('role', ['superadmin', 'administrator', 'owner'])->default('owner');
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->foreignUuid('condominium_id')->constrained('condominiums')->cascadeOnDelete();
+            $table->string('unit_number');
+            $table->string('owner_name');
+            $table->decimal('balance', 10, 2);
+            $table->enum('type', ['house', 'apartment']);
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('units');
     }
 };
