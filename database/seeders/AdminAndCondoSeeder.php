@@ -32,7 +32,7 @@ class AdminAndCondoSeeder extends Seeder
             'user_id' => $user->id,
         ]);
 
-        // Crear un condominio para el administrador
+        // Create a condominium
         $condo = Condominium::create([
             'name' => 'Condominio de Prueba',
             'administrator_id' => $administrator->id,
@@ -48,7 +48,7 @@ class AdminAndCondoSeeder extends Seeder
         // start date for balance 01/05/2024
         $start_date = '2024-01-05';
 
-        // Crear Balance inicial del condominio
+        // Create initial balance for the condominium
         $balance = Balance::create([
             'condominium_id' => $condo->id,
             'balance' => 500,
@@ -57,7 +57,7 @@ class AdminAndCondoSeeder extends Seeder
 
         $faker = Faker::create();
 
-        // Crear 3 unidades para el condominio
+        // Create 3 units for the condominium
         $unit1 = Unit::create([
             'condominium_id' => $condo->id,
             'unit_number' => 'PB-1',
@@ -86,12 +86,11 @@ class AdminAndCondoSeeder extends Seeder
         $currentDate = $startDate;
 
         foreach (range(1, 28) as $index) {
-            // Alternar entre crear un gasto y un ingreso
+            // Altern between expenses and incomes
             if ($index % 2 === 0) {
-                // Crear gastos cada dia manteniendo secuencia con ingresos
                 $date = $currentDate->addDays(1)->format('Y-m-d');
 
-                // Crear Gasto pero por orden de fecha
+                // Create expense
                 $expense = Expense::create([
                     'condominium_id' => $condo->id,
                     'amount' => $faker->randomFloat(2, 10, 50),
@@ -100,10 +99,10 @@ class AdminAndCondoSeeder extends Seeder
                     'created_at' => $date,
                 ]);
 
-                // obtener el balance anterior del condominio
+                // Get the balance of the unit to update it
                 $balance = Balance::where('condominium_id', $condo->id)->latest()->first();
 
-                // Actualizar balance del condominio
+                // Update the balance of the unit
                 $balance = Balance::create([
                     'condominium_id' => $condo->id,
                     'expense_id' => $expense->id,
@@ -111,12 +110,13 @@ class AdminAndCondoSeeder extends Seeder
                     'created_at' => $date,
                 ]);
             } else {
-                // Crear ingreso
+                // Select a random unit
                 $unit = $faker->randomElement([$unit1, $unit2, $unit3]);
 
-                // Crear ingresos cada 2 dia
+                // Date for the income
                 $date = $currentDate->addDays(1)->format('Y-m-d');
 
+                // Create income
                 $income = Income::create([
                     'condominium_id' => $condo->id,
                     'unit_id' => $unit->id,
@@ -126,14 +126,14 @@ class AdminAndCondoSeeder extends Seeder
                     'created_at' => $date,
                 ]);
 
-                // Obtener la unidad del income para actualizar el balance
+                // Get the balance of the unit to update it
                 $unitIncome = Unit::find($income->unit_id);
                 $unitIncome->balance = $unitIncome->balance + $income->amount;
 
-                // obtener el balance anterior del condominio
+                // Update the balance of the unit
                 $balance = Balance::where('condominium_id', $condo->id)->latest()->first();
 
-                // Actualizar balance del condominio
+                // Update the balance of the unit
                 $balance = Balance::create([
                     'condominium_id' => $condo->id,
                     'income_id' => $income->id,

@@ -17,16 +17,25 @@ class Balance extends Model
         'balance',
     ];
 
+    /**
+     * Get the condominium that owns the balance.
+     */
     public function condominium()
     {
         return $this->belongsTo(Condominium::class);
     }
 
+    /**
+     * Get the income that owns the balance.
+     */
     public function income()
     {
         return $this->belongsTo(Income::class);
     }
 
+    /**
+     * Get the expense that owns the balance.
+     */
     public function expense()
     {
         return $this->belongsTo(Expense::class);

@@ -25,7 +25,7 @@ class Condominium extends Model
     ];
 
     /**
-     * Obtener el administrador asociado al condominio.
+     * Get the administrator that owns the condominium.
      */
     public function administrator()
     {
@@ -33,7 +33,7 @@ class Condominium extends Model
     }
 
     /**
-     * Obtener las unidades asociadas al condominio.
+     * Get the units for the condominium.
      */
     public function units()
     {
@@ -41,7 +41,7 @@ class Condominium extends Model
     }
 
     /**
-     * Obtener los balances asociados al condominio.
+     * Get the balances for the condominium.
      */
     public function balances()
     {

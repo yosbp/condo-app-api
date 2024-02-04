@@ -47,7 +47,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Obtener el administrador asociado al usuario (si es administrador).
+     * Get the administrator that owns the user.
      */
     public function administrator()
     {
@@ -55,7 +55,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Obtener el condominio si es administrador y ya tiene uno registrado.
+     * Get the condominium that owns the user.
      */
     public function condominium()
     {
@@ -63,7 +63,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Obtener el propietario asociado al usuario (si es propietario).
+     * Get the owner that owns the user.
      */
     /* public function owner()
     {

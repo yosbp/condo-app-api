@@ -19,11 +19,17 @@ class Expense extends Model
         'date'
     ];
 
+    /**
+     * Get the category that owns the expense.
+     */
     public function category()
     {
         return $this->belongsTo(ExpenseCategory::class);
     }
-
+    
+    /**
+     * Get the condominium that owns the expense.
+     */
     public function condominium()
     {
         return $this->belongsTo(Condominium::class);

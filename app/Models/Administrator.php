@@ -15,7 +15,7 @@ class Administrator extends Model
     ];
 
     /**
-     * Obtener el usuario asociado al administrador.
+     * Get the user that owns the administrator.
      */
     public function user()
     {
@@ -23,7 +23,7 @@ class Administrator extends Model
     }
 
     /**
-     * Obtener el condominio asociado al administrador.
+     * Get the condominium that owns the administrator.
      */
     public function condominium()
     {

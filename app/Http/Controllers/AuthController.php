@@ -52,7 +52,7 @@ class AuthController extends Controller
             'role'  => $request->role,
         ]);
 
-        // Crear el administrador asociado al usuario
+        // Create Administrator if role is administrator
         if ($user->role === 'administrator') {
             $user->administrator()->create();
         }

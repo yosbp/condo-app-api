@@ -19,7 +19,7 @@ class Unit extends Model
     ];
 
     /**
-     * Obtener el condominio al que pertenece la unidad.
+     * Get the condominium that owns the unit.
      */
     public function condominium()
     {
