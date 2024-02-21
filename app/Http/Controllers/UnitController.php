@@ -13,7 +13,7 @@ class UnitController extends Controller
      */
     public function index()
     {
-
+        // Get authenticated user
         $user = Auth::user();
 
         // Get all units associated with logged in user and condominium

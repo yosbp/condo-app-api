@@ -6,23 +6,20 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ExpenseCategory extends Model
+class MaintenanceRecord extends Model
 {
     use HasFactory, HasUuids;
 
     protected $fillable = [
         'condominium_id',
-        'name',
         'description',
+        'status'
     ];
 
-    public function condominium()
-    {
-        return $this->belongsTo(Condominium::class);
-    }
-
-    public function expenses()
-    {
-        return $this->hasMany(Expense::class, 'expense_category_id', 'id');
+    /**
+     * Get the owner that owns the maintenance record.
+     */
+    public function owner() {
+        return $this->belongsTo(Owner::class); // A maintenance record belongs to an owner
     }
 }

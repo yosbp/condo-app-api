@@ -6,8 +6,10 @@ use App\Models\Administrator;
 use App\Models\Balance;
 use App\Models\Condominium;
 use App\Models\Expense;
+use App\Models\ExpenseCategory;
 use App\Models\Income;
 use App\Models\Unit;
+use App\Models\UnitType;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -55,11 +57,34 @@ class AdminAndCondoSeeder extends Seeder
             'created_at' => $start_date,
         ]);
 
+        // Create 3 unit types for the condominium
+        $unitType1 = UnitType::create([
+            'condominium_id' => $condo->id,
+            'name' => 'Esquina',
+            'description' => 'Apartamento 86mts',
+            'percentage' => 0.25,
+        ]);
+
+        $unitType2 = UnitType::create([
+            'condominium_id' => $condo->id,
+            'name' => 'Medio',
+            'description' => 'Apartamento 72mts',
+            'percentage' => 0.20,
+        ]);
+
+        $unitType3 = UnitType::create([
+            'condominium_id' => $condo->id,
+            'name' => 'Penthouse',
+            'description' => 'Apartamento 120mts',
+            'percentage' => 0.30,
+        ]);
+
         $faker = Faker::create();
 
         // Create 3 units for the condominium
         $unit1 = Unit::create([
             'condominium_id' => $condo->id,
+            'unit_type_id' => $unitType1->id,
             'unit_number' => 'PB-1',
             'owner_name' => $faker->name,
             'balance' => 0,
@@ -68,6 +93,7 @@ class AdminAndCondoSeeder extends Seeder
 
         $unit2 = Unit::create([
             'condominium_id' => $condo->id,
+            'unit_type_id' => $unitType2->id,
             'unit_number' => 'PB-2',
             'owner_name' => $faker->name,
             'balance' => 0,
@@ -76,10 +102,24 @@ class AdminAndCondoSeeder extends Seeder
 
         $unit3 = Unit::create([
             'condominium_id' => $condo->id,
+            'unit_type_id' => $unitType3->id,
             'unit_number' => 'PB-3',
             'owner_name' => $faker->name,
             'balance' => 0,
             'type' => 'apartment',
+        ]);
+
+        // Create 2 expense categories for the condominium
+        $expenseCategory1 = ExpenseCategory::create([
+            'condominium_id' => $condo->id,
+            'name' => 'Gastos Generales de la Urbanización',
+            'description' => 'Gastos generales de la urbanización',
+        ]);
+
+        $expenseCategory2 = ExpenseCategory::create([
+            'condominium_id' => $condo->id,
+            'name' => 'Gastos de Mantenimiento',
+            'description' => 'Gastos de mantenimiento del condominio',
         ]);
 
         $startDate = Carbon::createFromFormat('d/m/Y', '05/01/2024');
@@ -90,10 +130,11 @@ class AdminAndCondoSeeder extends Seeder
             if ($index % 2 === 0) {
                 $date = $currentDate->addDays(1)->format('Y-m-d');
 
-                // Create expense
+                // Create expense for category 1 or 2
                 $expense = Expense::create([
                     'condominium_id' => $condo->id,
                     'amount' => $faker->randomFloat(2, 10, 50),
+                    'expense_category_id' => $faker->randomElement([$expenseCategory1->id, $expenseCategory2->id]),
                     'description' => $faker->sentence,
                     'date' => $date,
                     'created_at' => $date,
@@ -122,18 +163,19 @@ class AdminAndCondoSeeder extends Seeder
                     'unit_id' => $unit->id,
                     'amount' => $faker->randomFloat(2, 10, 50),
                     'description' => $faker->sentence,
+                    'type' => 'transfer',
+                    'bank' => 'Banesco',
                     'date' => $date,
                     'created_at' => $date,
                 ]);
 
-                // Get the balance of the unit to update it
-                $unitIncome = Unit::find($income->unit_id);
-                $unitIncome->balance = $unitIncome->balance + $income->amount;
+                // Get the balance of the unit from unit-balance to update it
+                $unit->balance + $income->amount;
 
-                // Update the balance of the unit
+                // Update the balance of the condominium
                 $balance = Balance::where('condominium_id', $condo->id)->latest()->first();
 
-                // Update the balance of the unit
+                // Update the balance of the condominium
                 $balance = Balance::create([
                     'condominium_id' => $condo->id,
                     'income_id' => $income->id,

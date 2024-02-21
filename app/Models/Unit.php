@@ -13,6 +13,7 @@ class Unit extends Model
     protected $fillable = [
         'unit_number',
         'condominium_id',
+        'unit_type_id',
         'owner_name',
         'balance',
         'type',
@@ -24,5 +25,13 @@ class Unit extends Model
     public function condominium()
     {
         return $this->belongsTo(Condominium::class);
+    }
+
+    /**
+     * Get the owner that owns the unit.
+     */
+    public function owner()
+    {
+        return $this->belongsTo(Owner::class);
     }
 }

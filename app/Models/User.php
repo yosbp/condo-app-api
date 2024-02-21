@@ -65,8 +65,8 @@ class User extends Authenticatable
     /**
      * Get the owner that owns the user.
      */
-    /* public function owner()
+    public function owner()
     {
-        return $this->hasOne(Owner::class);
-    } */
+        return $this->hasOne(Owner::class); // A user has one Owner
+    }
 }

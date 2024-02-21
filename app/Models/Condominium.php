@@ -47,4 +47,28 @@ class Condominium extends Model
     {
         return $this->hasMany(Balance::class); // A condominium has many balances
     }
+
+    /**
+     * Get the owners for the condominium.
+     */
+    public function owners()
+    {
+        return $this->hasMany(Owner::class); // A condominium has many owners
+    }
+
+    /**
+     * Get Expenses Categories for the condominium.
+     */
+    public function expenseCategories()
+    {
+        return $this->hasMany(ExpenseCategory::class); // A condominium has many expense categories
+    }
+
+    /**
+     * Get the expenses for the condominium.
+     */
+    public function expenses()
+    {
+        return $this->hasMany(Expense::class); // A condominium has many expenses
+    }
 }

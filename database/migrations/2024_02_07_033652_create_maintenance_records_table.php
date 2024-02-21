@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('expenses', function (Blueprint $table) {
+        Schema::create('maintenance_records', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('condominium_id')->constrained('condominiums')->cascadeOnDelete();
-            $table->foreignUuid('expense_category_id')->constrained('expense_categories')->cascadeOnDelete();
+            $table->foreignUuid('condominium_id')->constrained('condominiums');
             $table->string('description');
-            $table->decimal('amount', 10, 2);
-            $table->date('date');
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('expenses');
+        Schema::dropIfExists('maintenance_records');
     }
 };

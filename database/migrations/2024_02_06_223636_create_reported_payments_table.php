@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('expenses', function (Blueprint $table) {
+        Schema::create('reported_payments', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('condominium_id')->constrained('condominiums')->cascadeOnDelete();
-            $table->foreignUuid('expense_category_id')->constrained('expense_categories')->cascadeOnDelete();
+            $table->foreignUuid('owner_id')->constrained('owners');
             $table->string('description');
             $table->decimal('amount', 10, 2);
+            $table->string('type');
+            $table->string('bank')->nullable();
+            $table->boolean('is_verified')->default(false);
             $table->date('date');
             $table->timestamps();
         });
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('expenses');
+        Schema::dropIfExists('reported_payments');
     }
 };

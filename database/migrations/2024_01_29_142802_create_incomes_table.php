@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('incomes', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('condominium_id')->constrained('condominiums')->cascadeOnDelete();
-            $table->foreignUuid('unit_id')->constrained('units')->cascadeOnDelete();
+            $table->foreignUuid('unit_id')->constrained('units');
             $table->string('description');
             $table->decimal('amount', 10, 2);
+            $table->string('type');
+            $table->string('bank')->nullable();
             $table->date('date');
             $table->timestamps();
         });

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('units', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('condominium_id')->constrained('condominiums')->cascadeOnDelete();
+            $table->foreignUuid('unit_type_id')->constrained('unit_types')->cascadeOnDelete();
             $table->string('unit_number');
             $table->string('owner_name');
             $table->decimal('balance', 10, 2);

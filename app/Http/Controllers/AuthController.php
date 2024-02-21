@@ -52,9 +52,11 @@ class AuthController extends Controller
             'role'  => $request->role,
         ]);
 
-        // Create Administrator if role is administrator
+        // Create Administrator or Owner
         if ($user->role === 'administrator') {
             $user->administrator()->create();
+        } else if ($user->role === 'owner') {
+            $user->owner()->create();
         }
 
         // Return response
@@ -103,15 +105,18 @@ class AuthController extends Controller
         };
 
         // Get user data
-
         $user = User::where('email', $request->email)->first();
 
+        // Return response
         return response()->json([
             'status' => true,
             'message' => 'Loggin Successfully',
             'token' => $user->createToken("TOKEN")->plainTextToken,
             'user' => $user->only('name', 'email', 'role'),
-            'condominium' => $user->administrator->condominium ?? null,
+            'owner' => $user->owner ? $user->owner->only('unit_id', 'is_verified') : null,
+            'administrator' => [
+                'condominium' => $user->administrator->condominium ?? null,
+            ],
         ], 200);
     }
 

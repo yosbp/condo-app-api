@@ -11,13 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('expenses', function (Blueprint $table) {
+        Schema::create('invoices', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('condominium_id')->constrained('condominiums')->cascadeOnDelete();
-            $table->foreignUuid('expense_category_id')->constrained('expense_categories')->cascadeOnDelete();
             $table->string('description');
             $table->decimal('amount', 10, 2);
-            $table->date('date');
+            $table->integer('reserve_fund');
+            $table->decimal('total_amount', 10, 2);
+            $table->date('month');
+            $table->date('year');
+            $table->date('due_date');
+            $table->date('issued_date');
             $table->timestamps();
         });
     }
@@ -27,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('expenses');
+        Schema::dropIfExists('invoices');
     }
 };
