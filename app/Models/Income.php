@@ -14,6 +14,8 @@ class Income extends Model
         'condominium_id',
         'unit_id', 
         'description',
+        'method',
+        'bank',
         'amount',
         'date',
     ];

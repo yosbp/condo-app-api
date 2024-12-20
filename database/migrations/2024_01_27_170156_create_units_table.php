@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignUuid('unit_type_id')->constrained('unit_types')->cascadeOnDelete();
             $table->string('unit_number');
             $table->string('owner_name');
+            $table->string('owner_phone')->nullable();
+            $table->string('owner_email')->nullable();
             $table->decimal('balance', 10, 2);
             $table->enum('type', ['house', 'apartment']);
             $table->timestamps();

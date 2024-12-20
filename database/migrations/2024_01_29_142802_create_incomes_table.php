@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignUuid('unit_id')->constrained('units');
             $table->string('description');
             $table->decimal('amount', 10, 2);
-            $table->string('type');
+            $table->string('method');
             $table->string('bank')->nullable();
             $table->date('date');
             $table->timestamps();

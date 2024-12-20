@@ -69,7 +69,25 @@ class ExpenseCategoryController extends Controller
      */
     public function update(Request $request, ExpenseCategory $expenseCategory)
     {
-        //
+        // Verify if user id is role administrator
+        if (Auth::user()->role === 'administrator') {
+            // Update the expense category
+            $expenseCategory->update([
+                'name' => $request->name,
+                'description' => $request->description,
+            ]);
+
+            // Return a JSON response with the expense category
+            return response()->json([
+                'message' => 'Successfully updated expense category',
+                'expenseCategory' => $expenseCategory,
+            ], 200);
+        } else {
+            // Return a JSON response with the error message
+            return response()->json([
+                'message' => 'You are not authorized to update an expense category',
+            ], 403);
+        }
     }
 
     /**

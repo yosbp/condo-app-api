@@ -21,7 +21,8 @@ class Condominium extends Model
         'country',
         'postal_code',
         'phone',
-        'name_to_invoice'
+        'name_to_invoice',
+        'image_url'
     ];
 
     /**
@@ -38,6 +39,15 @@ class Condominium extends Model
     public function units()
     {
         return $this->hasMany(Unit::class); // A condominium has many units
+    }
+
+    /** 
+     * Get units types for the condominium.
+    */
+
+    public function unitTypes()
+    {
+        return $this->hasMany(UnitType::class); // A condominium has many unit types
     }
 
     /**

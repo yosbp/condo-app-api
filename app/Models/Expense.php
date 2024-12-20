@@ -16,7 +16,8 @@ class Expense extends Model
         'description',
         'amount',
         'entry_date',
-        'date'
+        'date',
+        'invoiced'
     ];
 
     /**

@@ -15,6 +15,8 @@ class Unit extends Model
         'condominium_id',
         'unit_type_id',
         'owner_name',
+        'owner_phone',
+        'owner_email',
         'balance',
         'type',
     ];

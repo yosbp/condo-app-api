@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignUuid('owner_id')->constrained('owners');
             $table->string('description');
             $table->decimal('amount', 10, 2);
-            $table->string('type');
+            $table->string('method');
             $table->string('bank')->nullable();
             $table->boolean('is_verified')->default(false);
             $table->date('date');

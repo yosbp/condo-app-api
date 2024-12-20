@@ -46,6 +46,8 @@ class IncomeController extends Controller
             // Create a new income
             $income = Income::create([
                 'description' => $request->description,
+                'method' => $request->method,
+                'bank' => $request->bank,
                 'amount' => $request->amount,
                 'condominium_id' => $condominium_id,
                 'unit_id' => $request->unit_id,
@@ -67,8 +69,6 @@ class IncomeController extends Controller
             $unit = Unit::find($request->unit_id);
             $unit->balance = $unit->balance + $request->amount;
             $unit->save();
-
-
 
             // Return a JSON response with the condominium
             return response()->json([

@@ -38,9 +38,12 @@ class UnitController extends Controller
         if (Auth::user()->role === 'administrator') {
             // Create a new unit
             $unit = Unit::create([
+                'unit_type_id' => $request->unit_type_id,
                 'unit_number' => $request->unit_number,
                 'condominium_id' => $condominium_id,
                 'owner_name' => $request->owner_name,
+                'owner_phone' => $request->owner_phone,
+                'owner_email' => $request->owner_email,
                 'balance' => $request->balance,
                 'type' => $request->type,
             ]);
@@ -79,6 +82,8 @@ class UnitController extends Controller
             // Update the unit
             $unit->update([
                 'owner_name' => $request->owner_name,
+                'owner_phone' => $request->owner_phone,
+                'owner_email' => $request->owner_email,
             ]);
 
             // Return a JSON response with the condominium

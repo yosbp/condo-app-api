@@ -39,6 +39,7 @@ class ExpenseController extends Controller
                 'description' => $request->description,
                 'amount' => $request->amount,
                 'condominium_id' => $condominium_id,
+                'expense_category_id' => $request->expense_category_id,
                 //format date from 2024-02-01T04:13:09.940Z to functional date to mysql
                 'date' => date('Y-m-d', strtotime($request->date)),
             ]);

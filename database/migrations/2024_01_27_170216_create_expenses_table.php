@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignUuid('expense_category_id')->constrained('expense_categories')->cascadeOnDelete();
             $table->string('description');
             $table->decimal('amount', 10, 2);
+            $table->boolean('invoiced')->default(false);
             $table->date('date');
             $table->timestamps();
         });

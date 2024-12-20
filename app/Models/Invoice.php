@@ -13,24 +13,36 @@ class Invoice extends Model
     protected $fillable = [
         'condominium_id',
         'description',
+        'amount',
+        'reserve_fund',
         'total_amount',
         'month',
         'year',
         'due_date',
-        'issue_date',
     ];
 
     /**
      * Get the condominium that owns the invoice.
      */
-    public function condominium() {
+    public function condominium()
+    {
         return $this->belongsTo(Condominium::class); // An invoice belongs to a condominium
     }
 
     /**
-     * Get expenses that belong to the invoice.
+     * Get the invoice items for the invoice.
      */
-    public function expenses() {
-        return $this->hasMany(Expense::class, 'invoice_items'); // An invoice has many expenses
+    public function invoiceItems()
+    {
+        return $this->hasMany(InvoiceItem::class);
+    }
+
+    /**
+     * Get the expenses through invoice items.
+     */
+    public function expenses()
+    {
+        return $this->hasManyThrough(Expense::class, InvoiceItem::class, 'invoice_id', 'id', 'id', 'expense_id');
+        // hasManyThrough(RelatedModel, ThroughModel, ForeignKeyOnThroughModel, ForeignKeyOnRelatedModel, LocalKey, LocalKeyOnThroughModel)
     }
 }

@@ -47,8 +47,8 @@ class AdminAndCondoSeeder extends Seeder
             'name_to_invoice' => 'Condominio de Prueba',
         ]);
 
-        // start date for balance 01/05/2024
-        $start_date = '2024-01-05';
+        // start date for balance 30 days ago
+        $start_date = Carbon::now()->subDays(30);
 
         // Create initial balance for the condominium
         $balance = Balance::create([
@@ -87,6 +87,8 @@ class AdminAndCondoSeeder extends Seeder
             'unit_type_id' => $unitType1->id,
             'unit_number' => 'PB-1',
             'owner_name' => $faker->name,
+            'owner_phone' => $faker->phoneNumber,
+            'owner_email' => $faker->email,
             'balance' => 0,
             'type' => 'apartment',
         ]);
@@ -122,8 +124,22 @@ class AdminAndCondoSeeder extends Seeder
             'description' => 'Gastos de mantenimiento del condominio',
         ]);
 
-        $startDate = Carbon::createFromFormat('d/m/Y', '05/01/2024');
+        $startDate = $start_date;
         $currentDate = $startDate;
+
+        // Get 10 expenses descriptions
+        $expensesDescriptions = [
+            'Pago de vigilancia',
+            'Pago de limpieza',
+            'Pago de jardinería',
+            'Pago de administración',
+            'Pago de ascensor',
+            'Pago de electricidad',
+            'Pago de agua',
+            'Pago de gas',
+            'Pago de teléfono',
+            'Pago de internet',
+        ];
 
         foreach (range(1, 28) as $index) {
             // Altern between expenses and incomes
@@ -135,7 +151,7 @@ class AdminAndCondoSeeder extends Seeder
                     'condominium_id' => $condo->id,
                     'amount' => $faker->randomFloat(2, 10, 50),
                     'expense_category_id' => $faker->randomElement([$expenseCategory1->id, $expenseCategory2->id]),
-                    'description' => $faker->sentence,
+                    'description' => $faker->randomElement($expensesDescriptions),
                     'date' => $date,
                     'created_at' => $date,
                 ]);
@@ -157,13 +173,24 @@ class AdminAndCondoSeeder extends Seeder
                 // Date for the income
                 $date = $currentDate->addDays(1)->format('Y-m-d');
 
+                // Get a random description for the income
+                $incomesDescriptions = [
+                    'Pago de mantenimiento',
+                    'Pago de condominio',
+                    'Pago de vigilancia',
+                    'Pago de limpieza',
+                    'Pago de jardinería',
+                    'Pago de administración',
+                    'Pago de ascensor',
+                ];
+
                 // Create income
                 $income = Income::create([
                     'condominium_id' => $condo->id,
                     'unit_id' => $unit->id,
                     'amount' => $faker->randomFloat(2, 10, 50),
-                    'description' => $faker->sentence,
-                    'type' => 'transfer',
+                    'description' => $faker->randomElement($incomesDescriptions),
+                    'method' => 'transfer',
                     'bank' => 'Banesco',
                     'date' => $date,
                     'created_at' => $date,

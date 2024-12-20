@@ -114,9 +114,7 @@ class AuthController extends Controller
             'token' => $user->createToken("TOKEN")->plainTextToken,
             'user' => $user->only('name', 'email', 'role'),
             'owner' => $user->owner ? $user->owner->only('unit_id', 'is_verified') : null,
-            'administrator' => [
-                'condominium' => $user->administrator->condominium ?? null,
-            ],
+            'condominium' => $user->owner ? $user->owner->unit->condominium->only('name', 'id') : ($user->administrator ? $user->administrator->condominium->only('name', 'id') : null),
         ], 200);
     }
 

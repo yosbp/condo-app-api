@@ -14,14 +14,13 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('condominium_id')->constrained('condominiums')->cascadeOnDelete();
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->decimal('amount', 10, 2);
             $table->integer('reserve_fund');
             $table->decimal('total_amount', 10, 2);
-            $table->date('month');
-            $table->date('year');
-            $table->date('due_date');
-            $table->date('issued_date');
+            $table->string('month');
+            $table->string('year');
+            $table->string('due_date');
             $table->timestamps();
         });
     }

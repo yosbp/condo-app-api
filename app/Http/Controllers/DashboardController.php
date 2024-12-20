@@ -22,7 +22,7 @@ class DashboardController extends Controller
         $transactions = $incomes->merge($expenses)->sortBy(function ($transaction) {
             return [$transaction->date, $transaction instanceof Income ? 1 : 0];
         }, SORT_REGULAR)->values();
-        
+
 
         $transactions = $transactions->map(function ($item, $key) {
             $item->makeHidden(['condominium_id', 'unit_id']);
@@ -48,21 +48,44 @@ class DashboardController extends Controller
         $total_previous_monthly_expense = Expense::where('condominium_id', Auth::user()->condominium->id)->whereMonth('date', date('m', strtotime('-1 month')))->sum('amount');
         $previous_difference = $total_previous_monthly_income - $total_previous_monthly_expense;
         $last_day_of_previous_month = date('t/m/Y', strtotime('-1 month'));
-      
 
-        // Get evolution balance in last 30 days in array form, to be used in the chart, can get label dates and balance values like label: [date1, date2, date3], data: [balance1, balance2, balance3] in desc order
-        $evolution_balance = Auth::user()->condominium->balances->where('created_at', '>=', now()->subDays(30))->map(function ($item) {
-            return [
-                'label' => $item->created_at->format('d/m'),
-                'data' => $item->balance
-            ];
-        });
+
+        // Get the balances for the last 15 days, sorted by created_at in ascending order
+        $balances = Auth::user()->condominium->balances
+            ->where('created_at', '>=', now()->subDays(15))
+            ->sortBy('created_at');
+
+        // Initialize an empty collection for the result
+        $evolution_balance = collect();
+
+        // Set the start date to 14 days ago (to include today)
+        $startDate = now()->subDays(14);  // 14 to include the current day
+        $previousBalance = null; // To store the balance from the previous day
+
+        for ($date = $startDate; $date->lte(now()); $date->addDay()) {
+            // Filter balances for the current day and take the last one (most recent)
+            $balanceForDay = $balances->filter(function ($balance) use ($date) {
+                return $balance->created_at->isSameDay($date);
+            })->last(); // Take the last balance of the day, i.e., the most recent
+
+            if ($balanceForDay) {
+                // If a balance exists, use it and update the previous balance
+                $previousBalance = $balanceForDay->balance;
+            }
+
+            // Add the entry with the date and the balance (either the current or previous day's balance)
+            $evolution_balance->push([
+                'label' => $date->format('d/m'),
+                'data'  => $previousBalance,
+            ]);
+        }
 
         // get evolution balance only labels and reverse results and get array
         $evolution_balance_labels = $evolution_balance->pluck('label');
 
         // get evolution balance only data
         $evolution_balance_data = $evolution_balance->pluck('data');
+
 
         // Return a JSON response with the incomes and expenses
         return response()->json([
